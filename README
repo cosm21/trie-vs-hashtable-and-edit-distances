@@ -1,0 +1,35 @@
+Moscalu Cosmin-Andrei
+
+Trie vs Hashtable si Distante de editare
+
+Fisiere:
+	Edit distance - contine fisierele folosite pentru testarea distantelor
+						dintre sirurile de caractere, mai multe informatii
+						in Edit distance/README
+	Trie		  - contine fisierele folosite pentru comparea trie-ului
+						cu hashtable-ului, mai multe informatii in Trie/README
+
+Mentiuni:
+	Doua din fisierele de referinta pentru testele pentru trie au fost omise
+	datorita dimensiunii foarte mari (>500MB).
+	Aceste pot fi generate cu urmatoarele comenzi:
+
+	cd Trie
+	./programs/genoutput.sh 23
+	./programs/genoutput.sh 24
+
+	fiind nevoie de python pentru rularea implementarilor de referinta.
+
+	Pentru verificarea corectitudinii unor teste se pot rula comenzile:
+	cd Trie
+	./programs/test.sh <numar test>
+
+	si, respectiv,
+
+	cd Edit\ distance
+	./programs/test.sh <numar test>
+
+	De asemenea, pentru a se vedea timpii de rulare pentru teste, se pot edita
+	fisierele Trie/ms_test.c, Trie/trie_test.c si, respectiv,
+	Edit distance/test_basic.c si Edit distance/test_uk.c, scotandu-se de la
+	finalul functiei main blocul comentat care contine afisarea timpilor.

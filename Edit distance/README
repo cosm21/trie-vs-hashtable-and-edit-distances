@@ -1,0 +1,99 @@
+README
+
+Edit distance:
+
+1) Fisierele
+distance.{hc} -> Contin definitii si implementari pentru distanta
+		 Levenshtein si distanta Damerau Levenshtein restrictionata;
+test_basic.c  -> Un program care testeaza implemetarea algoritmului Wagner-Fischer
+		 pentru distanta Levenshtein si Damerau-Levenshtein restrictionata;
+test_uk.c     -> Un program care testeaza algoritmul Ukkonen pentru distanta
+		 Levenshtein si pentru Damerau-Levenshtein restrictionata;
+programs/     -> Contine diverse scripturi bash si programe python care au fost
+		 folosite pentru a genera testele. Mai contine si o lista foarte
+		 mare de cuvinte;
+ref.py	      -> Un program in python care a fost folosit ca referinta pentru
+		 ceilalti algoritmi, sursele sunt citate in fisier.
+
+2) Detalii legate de implementare
+Cele doua distante, Levenshtein si Damerau-Levenshtein restrictionata
+sunt definite in mod normal recursiv, dar implementarea solutiilor
+in acest mod ar duce la rezultate foarte ineficiente. Din acest motiv
+implementarile distantelor sunt facute cu algoritmul Wagner-Fischer de
+programare dinamica pentru ambele distante. Aceste implementari
+sunt comparate cu algoritmul imbunatatit propus de Esko Ukkonen,
+care ar trebui sa fie mai eficient in cazul in care se stie de
+dinainte un numar maxim de modificari permis asupra sirului de caractere.
+
+Toate implementarile aloca memoria static deoarece este mai rapid.
+Pentru verificarea memoriei ocupate, alocarile statice pot
+fi inlocuite cu alocari dinamice.
+
+Din nefericire, implementarea facuta de mine pentru varianta imbunatatita
+pentru calcularea distantei Damerau-Levenshtein restrictionata nu functioneaza
+in toate cazurile. De aceea am decis sa implementez o varianta propusa
+tot de Ukkonen care poate functiona si pentru costuri diferite intre
+operatii. Aceasta implementare parcurge doar diagonalele care se afla
+intr-o limita, asta daca se da limita, altfel ruleaza algoritmul
+Wagner-Fischer.
+
+In implementarea algoritmului propus de Ukkonen, s-a mai folosit ca
+inspiratie si http://www.berghel.net/publications/asm/asm.php.
+
+3) Structura si continutul testelor
+Pentru generearea testelor am folosit diverse programe in python, rezultatele
+implementarilor in C au fost comparate cu o implementare de referinta.
+
+Structura testelor:
+Testele contin pe prima linie doua numere, care indica numarul de perechi pe
+care se vor calcula distantantele si, respectiv, un threshold pentru algoritmii
+imbunatatiti propusi de Ukkonen. Pe liniile care urmeaza se afla cate doua
+cuvinte per linie.
+
+La iesire, se vor afla doua numere care reprezinta distanta Levenshtein si
+distanta Damerau-Levenshtein dintre perechea corespunzatoare intrarii.
+
+Testele:
+Testele au fost generate aproape in intregime automat cu ajutorul programelor
+mentionate si contin siruri de caractere aleatoare. Primele 8 teste sunt facute
+pentru verificarea corectitudinii algoritmilor, in felul in care urmeaza:
+
+1 -> contine 100000 de perechi, fiecare pereche fiind formata din acelasi
+     cuvant. Se verifica ca distanta de editare dintre un sir si el insusi
+     este mereu 0;
+2 -> aceeasi dimensiunea ca inainte, doar ca pentru realizarea unei perechi se
+     ia un cuvant si se modifica o litera din acesta. In acest caz distanta
+     rezultata nu ar trebui sa fie mai mult de 1;
+3 -> la fel ca la 2, doar ca se aplica transpozitii in loc de schimbari;
+4 -> cu acest test se va verifica urmatoarea proprietate: daca se calculeaza
+     distanta dintre doua siruri si apoi se modifica unul din cuvinte printr-o litera,
+     distanta poate sa difere cu mai mult de 1 de cea initiala. Se va repeta
+     aceeasi idee de 100000 de ori, deci vor rezulta 200000 de perechi;
+5 -> la fel ca la testul 4, doar ca se vor face cel mult 3 schimbari in fiecare cuvant,
+     cuvintele sunt mai lungi, de la 10 pana la 30 de litere;
+6 -> la fel ca la testul 5, doar ca se fac cel mult 5 schimbari;
+7 -> la fel ca la testul 5, doar ca se dau mai multe cuvinte;
+8 -> un test de verificare a proprietatii de simetrie a distantelor de editare,
+     contine 200000 de intrari.
+
+
+Testele urmatoare variaza in dimensiuni si sunt folosite pentru a vedea care
+este evolutia algoritmilor in functie de dimensiunea datelor de intrare,
+ideal ar fi sa creasca liniar.
+
+9 - 12  -> dimensiunile sunt: 50000, 100000, 250000, 500000
+
+Mai departe, se va verifica si ce se intampla daca se ofera o limita algoritmilor
+imbunatatiti, toate testele au 100000 de perechi la intrare:
+
+13 - 17 -> cuvintele au lungimi intre 10 si 30 si pot avea o distanta
+	   maxima de 1,3,5,7,9 respectiv;
+18 - 22 -> identice cu 13 - 17, doar ca nu se mai ofera o limita pentru algoritmii
+	   imbunatatiti, e de asteptat ca acestia sa nu mai fie atat de rapizi.
+
+Ultimele doua teste folosesc cuvinte dintr-un dictionar foarte mare, pentru
+a vedea ce se intampla intr-un caz mai aproape de realitate:
+
+23	-> se compara doua cuvinte aleatoare din dictionar;
+24	-> se ia un cuvant din dictionar si i se modifica o litera, distanta
+	   va fi cel mult 1.

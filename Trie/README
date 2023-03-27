@@ -1,0 +1,98 @@
+Moscalu Cosmin-Andrei
+
+Trie:
+
+1) Fisiere
+LinkedList.{hc} -> Lista inlantuita;
+Hashtable.{hc}  -> Implementare pentru tabela de dispersie generica, functii
+		   de hash preluate din alte surse;
+utils.h		-> Contine un macro folosit de LinkedList;
+multiset.{hc}   -> O serie de functii wrapper care fac hashtable-ul sa se comporte
+		   ca un multiset;
+trie.{hc} 	-> Contine structura de trie si implementarea acesteia;
+ref.py		-> Un program scris in python care reprezinta implementarea
+		   de referinta pentru trie si multiset;
+trie_test.c	-> Doua programe care testeaza functionalitatea trie-ului, respectiv
+ms_test.c	   a hashtable-ului;
+programs/       -> Contine o serie de programe folosite pentru generearea
+		   testelor si o lista foarte mare de cuvinte.
+
+2) Detalii legate de implementare
+Programele sunt implementate cat mai simplu, cu scopul ca acestea sa fie cat mai
+rapide. Chiar daca cele doua structuri pot asocia unei chei o valoare,
+trie-ul putand avea ca cheie doar un sir de caractere, am ales in programele
+de testare sa nu verific aceasta functionalitate pentru ca nu este relevanta si,
+in plus, programele de testare se comporta de parca ar fi primit o valoare
+pe care sa o asocieze cuvantului.
+
+Trie-ul este implementat simplu, fiecare nod al trie-ului reprezinta o litera
+si contine mai departe un array de pointeri la nodurile copil. Multiset-ul este
+implementat cu un hashtable, acesta fiind la rand implementat cu direct chaining,
+si avand un numar constant de "galeti" pe parcursul rularii testelor.
+
+Un avantaj pe care il are trie-ul peste multiset este ca toate cheile acestuia
+pot fi afisate in ordine lexicografica in mod direct. Din acest motiv am creat
+o functie care afiseaza cheile unui hashtable in ordine lexicografica. Pentru
+a realiza aceasta afisare a fost nevoie de o un algoritm de sortare care
+functioneaza si pe liste inlantuite, de aceea am preluat de pe geeksforgeeks
+o implementare pentru merge sort pe liste inlantuite pe care am adaptat-o
+codului meu.
+
+3) Structura si continutul testelor
+Pentru realizarea testelor m-am ajutat de o serie de scripturi bash alaturi de
+o implementare in python ale aceleiasi probleme, pe care am considerat-o
+de referinta, din moment ce este foarte simpla si poate fi verificata usor.
+
+Structura testelor:
+Testele contin pe fiecare linie cate o operatie si un cuvant daca operatia
+il cere. Operatiile sunt reprezentate de primul caracter de pe linie si pot
+fi:
+I - insereaza cuvantul;
+L - cauta in structura cuvantul;
+P - printeaza toate cuvintele din structura;
+D - sterge un cuvant din structura;
+E - termina executia testului.
+
+Iesirile testelor contin diverse fraze pentru a indica succesul operatiei
+care s-a cerut.
+
+Testele:
+Testele au fost generate fie manual, fie cu ajutorul comenzilor din linux sau
+cu a unor scripturi.
+
+Primele 8 teste sunt foarte simple, fiind facute pentru a verifica functionalitatea
+de baza a celor doua programe, acestea au fost verificate si rulate manual.
+
+1   -> inserare simpla pe niste cuvinte foarte diferite, se va vedea proprietatea
+       trie-ului de a afisa cuvintele in ordine
+2   -> la fel ca la 1, doar ca au fost puse cuvinte care au prefixe comune
+3   -> inserari plus cautari care ar trebui sa reuseasca in totalitate
+4   -> la fel ca la 3, doar ca nu toate cautarile vor reusi
+5   -> stergere simpla cu verificare
+6   -> stergere mai complicata, se incearca stergerea unui cuvant deja sters
+7,8 -> doua teste de verificare a corectitudinii in care se incearca o combinatie
+       de operatii
+
+Dupa verificarea functionalitatii de baza, urmatoarele teste sunt mai complexe si
+variaza in dimensiuni. Acestea au fost generate automat si se vor folosi pentru
+a compara eficienta structurilor de date. Iesirile acestor teste au fost
+generate cu implementarea de referinta.
+
+9 - 18 -> perechi de cate doua teste care au aceeasi lungime dar contin cuvinte
+	  diferite. In aceste teste se insereaza un anumit numar de cuvinte
+	  se cauta toate aceste cuvinte in alta ordine, si apoi se sterg
+	  toate cuvintele tot in alta ordine.
+	  Numarul de cuvinte este urmatorul: 2 teste cu 10000 de cuvinte,
+	  2 cu 25000, 2 cu 50000, 2 cu 100000 si 2 cu 300000 de cuvinte.
+19, 20 -> se insereaza 100000 de cuvinte, se cauta si se sterg toate, doar ca 
+	  de data aceasta cuvintele se insereaza, se cauta si se sterg in ordine.
+	  Ideal ar fi ca trie-ul sa devina mai rapid aici.
+21, 22 -> se insereaza 100000 de cuvinte si apoi se incearca stergerea a altor
+	  100000 de cuvinte care nu exista in lista.
+	  Trie-ul ar putea sa fie mai rapid in aceste situatii, hashtable-ul
+	  trebuie sa faca si hash-ul pe intrare, pe cand trie-ul s-ar putea
+	  sa se opreasca mai devreme.
+23, 24 -> se insereaza 100000 de cuvinte, dupa care urmeaza un numar mare
+	  de stergeri, inserari si cautari in orice ordine posibila.
+	  Ar trebui sa se vada un fel de comportament "mediu" al celor
+	  doua structuri.
